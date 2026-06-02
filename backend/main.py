@@ -8,11 +8,12 @@ from database import SessionLocal, engine
 from models import Base, Ticket
 from schemas import TicketCreate, TicketUpdate
 
-# Create Tables
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Support CRM API"
+    title="Support CRM API",
+    version="1.0.0"
 )
 
 # CORS
@@ -21,7 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://support-crm-cyan.vercel.app",
+        "https://support-crm-cyan.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -163,7 +164,7 @@ def update_ticket(
     }
 
 
-# Dashboard Stats
+# Dashboard Statistics
 
 @app.get("/api/stats")
 def get_stats(
@@ -173,13 +174,7 @@ def get_stats(
 
     return {
         "total": len(tickets),
-        "open": len(
-            [t for t in tickets if t.status == "Open"]
-        ),
-        "in_progress": len(
-            [t for t in tickets if t.status == "In Progress"]
-        ),
-        "closed": len(
-            [t for t in tickets if t.status == "Closed"]
-        )
+        "open": len([t for t in tickets if t.status == "Open"]),
+        "in_progress": len([t for t in tickets if t.status == "In Progress"]),
+        "closed": len([t for t in tickets if t.status == "Closed"])
     }
