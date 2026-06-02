@@ -1,21 +1,27 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from datetime import datetime
 
 from database import SessionLocal, engine
 from models import Base, Ticket
 from schemas import TicketCreate, TicketUpdate
 
-# Create database tables
+# Create Tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="Support CRM API"
+)
 
-# CORS Configuration
+# CORS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -23,6 +29,7 @@ app.add_middleware(
 
 
 # Database Session
+
 def get_db():
     db = SessionLocal()
     try:
@@ -32,12 +39,16 @@ def get_db():
 
 
 # Home Route
+
 @app.get("/")
 def home():
-    return {"message": "CRM Running Successfully"}
+    return {
+        "message": "Support CRM Running Successfully"
+    }
 
 
 # Create Ticket
+
 @app.post("/api/tickets")
 def create_ticket(
     ticket: TicketCreate,
@@ -52,7 +63,9 @@ def create_ticket(
         customer_name=ticket.customer_name,
         customer_email=ticket.customer_email,
         subject=ticket.subject,
-        description=ticket.description
+        description=ticket.description,
+        status="Open",
+        notes=""
     )
 
     db.add(new_ticket)
@@ -66,6 +79,7 @@ def create_ticket(
 
 
 # Get All Tickets
+
 @app.get("/api/tickets")
 def get_tickets(
     search: str = "",
@@ -76,7 +90,13 @@ def get_tickets(
 
     if search:
         query = query.filter(
-            Ticket.customer_name.contains(search)
+            or_(
+                Ticket.customer_name.contains(search),
+                Ticket.customer_email.contains(search),
+                Ticket.ticket_id.contains(search),
+                Ticket.subject.contains(search),
+                Ticket.description.contains(search)
+            )
         )
 
     if status:
@@ -84,10 +104,15 @@ def get_tickets(
             Ticket.status == status
         )
 
-    return query.all()
+    tickets = query.order_by(
+        Ticket.created_at.desc()
+    ).all()
+
+    return tickets
 
 
 # Get Single Ticket
+
 @app.get("/api/tickets/{ticket_id}")
 def get_ticket(
     ticket_id: str,
@@ -107,6 +132,7 @@ def get_ticket(
 
 
 # Update Ticket
+
 @app.put("/api/tickets/{ticket_id}")
 def update_ticket(
     ticket_id: str,
@@ -128,8 +154,31 @@ def update_ticket(
     ticket.updated_at = datetime.utcnow()
 
     db.commit()
+    db.refresh(ticket)
 
     return {
         "success": True,
         "updated_at": ticket.updated_at
+    }
+
+
+# Dashboard Stats
+
+@app.get("/api/stats")
+def get_stats(
+    db: Session = Depends(get_db)
+):
+    tickets = db.query(Ticket).all()
+
+    return {
+        "total": len(tickets),
+        "open": len(
+            [t for t in tickets if t.status == "Open"]
+        ),
+        "in_progress": len(
+            [t for t in tickets if t.status == "In Progress"]
+        ),
+        "closed": len(
+            [t for t in tickets if t.status == "Closed"]
+        )
     }
