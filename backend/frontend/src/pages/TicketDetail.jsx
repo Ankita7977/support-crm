@@ -83,7 +83,9 @@ function TicketDetail() {
 
         <div className="d-flex justify-content-between align-items-center mb-3">
 
-          <h2>{ticket.ticket_id}</h2>
+          <h2>
+            {ticket.ticket_id}
+          </h2>
 
           <span
             className={
@@ -122,7 +124,7 @@ function TicketDetail() {
         </p>
 
         <p>
-          <strong>Created:</strong>{" "}
+          <strong>Created At:</strong>{" "}
           {ticket.created_at
             ? new Date(
                 ticket.created_at
@@ -172,13 +174,13 @@ function TicketDetail() {
         <div className="mb-3">
 
           <label className="form-label">
-            Notes
+            Notes / Comments
           </label>
 
           <textarea
             rows="5"
             className="form-control"
-            placeholder="Add notes here..."
+            placeholder="Add notes..."
             value={notes}
             onChange={(e) =>
               setNotes(e.target.value)
