@@ -22,7 +22,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://support-crm-cyan.vercel.app"
+        "https://support-crm-cyan.vercel.app",
+        "https://support-crm-chsp.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
