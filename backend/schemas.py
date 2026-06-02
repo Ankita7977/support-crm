@@ -22,7 +22,6 @@ class TicketResponse(BaseModel):
     description: str
     status: str
     notes: str
-
     created_at: datetime
     updated_at: datetime
 
