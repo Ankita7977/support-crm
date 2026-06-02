@@ -1,34 +1,34 @@
 # Support CRM System
 
-A simple CRM Ticket Management System built using:
+Customer Support Ticketing CRM System
 
+## Tech Stack
+
+Backend:
 - FastAPI
 - SQLite
 - SQLAlchemy
-- React (Vite)
+
+Frontend:
+- React
 - Bootstrap
+- Axios
 
 ## Features
 
-- Create Ticket
-- View All Tickets
+- Create Tickets
+- Auto Ticket ID
 - Search Tickets
 - Filter by Status
-- View Ticket Details
-- Update Status
+- Update Ticket Status
 - Add Notes
+- View Ticket Details
 
-## Backend
+## Run Backend
 
-```bash
-cd backend
 uvicorn main:app --reload
-```
 
-## Frontend
+## Run Frontend
 
-```bash
-cd frontend
 npm install
 npm run dev
-```
