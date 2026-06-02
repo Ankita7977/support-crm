@@ -8,7 +8,7 @@ Frontend URL:
 (Add Vercel URL here)
 
 Backend URL:
-(Add Railway URL here)
+support-crm-production-323c.up.railway.app
 
 ---
 
