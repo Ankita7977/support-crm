@@ -5,10 +5,10 @@ A full-stack Customer Support Ticketing CRM System built using FastAPI, SQLite, 
 ## Live Demo
 
 Frontend URL:
-https://support-crm-cyan.vercel.app
+https://support-crm-cyan.vercel.app/
 
 Backend URL:
-support-crm-production-323c.up.railway.app
+https://support-crm-chsp.onrender.com/
 
 ---
 
