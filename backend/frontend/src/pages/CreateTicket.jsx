@@ -22,6 +22,17 @@ function CreateTicket() {
   };
 
   const submitTicket = async () => {
+    // Validation
+    if (
+      !form.customer_name.trim() ||
+      !form.customer_email.trim() ||
+      !form.subject.trim() ||
+      !form.description.trim()
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -36,7 +47,7 @@ function CreateTicket() {
       );
 
       alert(
-        `Ticket Created Successfully: ${response.data.ticket_id}`
+        `Ticket Created Successfully!\nTicket ID: ${response.data.ticket_id}`
       );
 
       setForm({
@@ -126,8 +137,8 @@ function CreateTicket() {
           </label>
 
           <textarea
-            name="description"
             rows="5"
+            name="description"
             className="form-control"
             placeholder="Describe the issue"
             value={form.description}
